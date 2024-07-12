@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import OOP_Task1.university.controller.StudyGroupController;
+import OOP_Task1.university.ecxeptions.NoFreeTeachersException;
 import OOP_Task1.university.ecxeptions.NotNullTeacherExpected;
 import OOP_Task1.university.model.DB.DateBase;
 import OOP_Task1.university.model.impl.Student;
@@ -67,7 +68,11 @@ public class StudyGroupsView {
                     System.out.println(controller.service.serviceT.getAllTeachers());
                     break;
                 case "4":
-                    replaceTeacher();
+                    try {
+                        replaceTeacher();
+                    } catch (NoFreeTeachersException e) {
+                        e.getMessage();
+                    }
                     break;
                 case "5":
                     System.out.println("Введите id группы, у которой хотите увидеть учителя.");
@@ -93,7 +98,11 @@ public class StudyGroupsView {
                     break;
                 case "11":
                     if(!controller.service.serviceS.getAllStudents().isEmpty() && !controller.service.serviceT.getAllTeachers().isEmpty()){
-                        createGroupByUsingJustIDs();
+                        try {
+                            createGroupByUsingJustIDs();
+                        } catch (NoFreeTeachersException e) {
+                            e.getMessage();
+                        }
                     }else{
                         System.out.println("К сожалению сейчас невозможно создать группу.");
                     }
@@ -116,7 +125,9 @@ public class StudyGroupsView {
         
     }
 
-    public void createGroupByUsingJustIDs(){
+    public void createGroupByUsingJustIDs() 
+                throws NoFreeTeachersException
+    {
 
         boolean isCreate = true;
         System.out.println("Список всех учителей, которые не в группах: ");
@@ -181,7 +192,9 @@ public class StudyGroupsView {
         return students;
     }
 
-    public void replaceTeacher(){
+    public void replaceTeacher()
+                throws NoFreeTeachersException
+    {
         
         System.out.println("Список всех преподавателей.");
         for (Teacher teacher : controller.service.serviceT.getAllTeachers()) {
